@@ -62,8 +62,28 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     public void setDayViewOnClickListener(DayViewOnClickListener listener) {
         mListener = listener;
     }
+
+    public long getSelectedDate() {
+        //Cycle from start day
+        LocalDateTime startDate = mStartDate;
+        LocalDateTime endDate = mEndDate;
+
+        long selectedDate = 0;
+        Boolean found = false;
+        while (startDate.isBefore(endDate.plusDays(1)) && !found) {
+            if (startDate.getDayOfMonth() == mSelectedDay) {
+                selectedDate = startDate.toDate().getTime();
+                found = true;
+            }
+
+            //Next day
+            startDate = startDate.plusDays(1);
+        }
+        return selectedDate;
+    }
+
     public interface DayViewOnClickListener {
-        public void onDaySelected(int day);
+        public void onDaySelected(long date);
     }
 
     //Day View
@@ -193,7 +213,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
                 //Call listener
                 if(notifyListeners && mListener != null)
-                    mListener.onDaySelected(mSelectedDay);
+                    mListener.onDaySelected(getSelectedDate());
             }
         }, delay);
     }
@@ -231,7 +251,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
             DayView dayView = new DayView(view);
 
             //Set texts and listener
-            dayView.setDayOfWeek(startDate.dayOfWeek().getAsShortText().substring(0,3));
+            dayView.setDayOfWeek(startDate.dayOfWeek().getAsShortText().substring(0, 3));
             if(!mDisplayDayOfWeek)
                 dayView.hideDayOfWeek();
 
