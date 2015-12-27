@@ -168,7 +168,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         render();
 
         //Set Selection. Default is today.
-        setSelectedDay(currentDateTime.getDayOfMonth(), false, DELAY_SELECTION);
+        setSelectedDay(currentDateTime.getDayOfMonth(), false);
     }
 
 
@@ -182,7 +182,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         render();
         //Set Selection. Default is today.
-        setSelectedDay(startDay, false, DELAY_SELECTION);
+        setSelectedDay(startDay, false);
     }
 
     private void setStartDateWithParts(int year, int month, int day) {
@@ -193,29 +193,23 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         mEndDate = new LocalDateTime(year, month, day, 0, 0, 0);
     }
 
-    public void setSelectedDay(final int day, final boolean notifyListeners, long delay) {
-        //Post delayed 300 ms at most because of redraw
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Deselect day selected
-                if(mSelectedDay > 0)
-                    unSelectDay(mSelectedDay);
+    public void setSelectedDay(final int day, final boolean notifyListeners) {
+        //Deselect day selected
+        if(mSelectedDay > 0)
+            unSelectDay(mSelectedDay);
 
-                //Set selected day
-                mSelectedDay = day;
-                selectDay(mSelectedDay);
+        //Set selected day
+        mSelectedDay = day;
+        selectDay(mSelectedDay);
 
-                //Scroll to DayView
-                if (mSelectedDayView != null) {
-                    scrollToDayView(mSelectedDayView);
-                }
+        //Scroll to DayView
+        if (mSelectedDayView != null) {
+            scrollToDayView(mSelectedDayView);
+        }
 
-                //Call listener
-                if(notifyListeners && mListener != null)
-                    mListener.onDaySelected(getSelectedDate());
-            }
-        }, delay);
+        //Call listener
+        if(notifyListeners && mListener != null)
+            mListener.onDaySelected(getSelectedDate());
     }
 
     public int getSelectedDay() {
@@ -323,9 +317,8 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         //Get selected day and set selection
         int selectedDay = dayView.getDay();
-        setSelectedDay(selectedDay, true, NO_DELAY_SELECTION);
+        setSelectedDay(selectedDay, true);
     }
-
 
     /**
      * Custom implementation for left and right spaces
@@ -374,7 +367,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         render();
 
-        setSelectedDay(mSelectedDay, false, DELAY_SELECTION);
+        setSelectedDay(mSelectedDay, false);
     }
 
     protected static class SavedState extends BaseSavedState {
