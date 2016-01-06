@@ -202,11 +202,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         mSelectedDay = day;
         selectDay(mSelectedDay);
 
-        //Scroll to DayView
-        if (mSelectedDayView != null) {
-            scrollToDayView(mSelectedDayView);
-        }
-
         //Call listener
         if(notifyListeners && mListener != null)
             mListener.onDaySelected(getSelectedDate());
@@ -300,13 +295,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         }
     }
 
-    public void scrollToDayView(DayView dayView) {
-        int x = dayView.getView().getLeft();
-        int y = dayView.getView().getTop();
-        smoothScrollTo(x - mLeftSpace.getLayoutParams().width, y);
-    }
-
-
     /**
      * On DayView click listener
      */
@@ -319,27 +307,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         int selectedDay = dayView.getDay();
         setSelectedDay(selectedDay, true);
     }
-
-    /**
-     * Custom implementation for left and right spaces
-     */
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-
-        if(changed) {
-            int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, getResources().getDisplayMetrics());
-
-            LinearLayout.LayoutParams leftParams = (LinearLayout.LayoutParams) mLeftSpace.getLayoutParams();
-            leftParams.width = getWidth() / 2 - padding;
-            mLeftSpace.setLayoutParams(leftParams);
-
-            LinearLayout.LayoutParams rightParams = (LinearLayout.LayoutParams) mRightSpace.getLayoutParams();
-            rightParams.width = getWidth() / 2 - padding;
-            mRightSpace.setLayoutParams(rightParams);
-        }
-    }
-
 
     /**
      * Configuration change handling
