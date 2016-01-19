@@ -178,7 +178,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     public void setStartAndEndDateWithParts(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         setStartDateWithParts(startYear, startMonth, startDay);
         setEndDateWithParts(endYear, endMonth, endDay);
-        mDaysContainer.removeAllViews();
 
         render();
         //Set Selection. Default is today.
@@ -220,6 +219,8 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     }
 
     private void render() {
+        mDaysContainer.removeAllViews();
+
         //Get inflater for view
         LayoutInflater inflater = LayoutInflater.from(mContext);
 

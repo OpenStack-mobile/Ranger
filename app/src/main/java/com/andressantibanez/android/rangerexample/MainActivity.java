@@ -9,6 +9,10 @@ import android.view.View;
 
 import com.andressantibanez.ranger.Ranger;
 
+import org.joda.time.DateTime;
+
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -24,6 +28,19 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(parentLayout, "Seleted date: " + date, Snackbar.LENGTH_SHORT).show();
             }
         });
+
+        DateTime startDate = new DateTime(new Date()).withTime(0, 0, 0, 0);
+        DateTime endDate = startDate.plusDays(5).withTime(23, 59, 59, 999);
+
+        ranger.setStartAndEndDateWithParts(
+                startDate.getYear(),
+                startDate.getMonthOfYear(),
+                startDate.getDayOfMonth(),
+                endDate.getYear(),
+                endDate.getMonthOfYear(),
+                endDate.getDayOfMonth()
+        );
+
     }
 
     @Override
