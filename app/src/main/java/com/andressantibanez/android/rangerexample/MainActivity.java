@@ -37,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
         LocalDateTime startDateTime = new LocalDateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), 0, 0, 0);
         LocalDateTime endDateTime = new LocalDateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), 0, 0, 0);
 
-        ArrayList<LocalDateTime> unactiveDates = new ArrayList<>();
-        unactiveDates.add(startDateTime.plusDays(1));
+        ArrayList<LocalDateTime> disabledDates = new ArrayList<>();
+        disabledDates.add(startDateTime.plusDays(1));
 
-        ranger.setStartAndEndDateWithDisabledDates(startDateTime, endDateTime, unactiveDates);
+        ranger.setStartAndEndDateWithDisabledDates(startDateTime, endDateTime, disabledDates);
     }
 
     @Override

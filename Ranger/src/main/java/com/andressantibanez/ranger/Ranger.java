@@ -223,7 +223,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     }
 
     private void setEndDateWithParts(int year, int month, int day) {
-        mEndDate = new LocalDateTime(year, month, day, 0, 0, 0);
+        mEndDate = new LocalDateTime(year, month, day, 23, 59, 59);
     }
 
     public void setSelectedDay(final int day, final boolean notifyListeners) {
@@ -267,7 +267,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         LocalDateTime endDate = mEndDate;
 
         boolean isDayDisabled;
-        while (startDate.isBefore(endDate.plusDays(1))) {
+        while (startDate.isBefore(endDate)) {
 
             //Inflate view
             LinearLayout view = (LinearLayout) inflater.inflate(DAY_VIEW_LAYOUT_RES_ID, mDaysContainer, false);
