@@ -11,6 +11,7 @@
         <attr name="daysContainerBackgroundColor" format="color"/>
 
         <attr name="dayTextColor" format="color"/>
+        <attr name="dayUnavailableTextColor" format="color"/>
         <attr name="selectedDayTextColor" format="color"/>
         <attr name="selectedDayBackgroundColor" format="color"/>
 

@@ -2,6 +2,7 @@ package com.andressantibanez.ranger;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -17,6 +18,9 @@ import android.widget.TextView;
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.joda.time.LocalDateTime;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ranger extends HorizontalScrollView implements View.OnClickListener {
 
@@ -46,9 +50,11 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     LocalDateTime mStartDate;
     LocalDateTime mEndDate;
     int mSelectedDay;
+    List<LocalDateTime> mDisabledDates = new ArrayList<>();
 
     //Colors
     int mDayTextColor;
+    int mDayUnavailableTextColor;
     int mSelectedDayTextColor;
     int mDaysContainerBackgroundColor;
     int mSelectedDayBackgroundColor;
@@ -146,6 +152,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
                 //Colors
                 mDayTextColor = a.getColor(R.styleable.Ranger_dayTextColor, getColor(R.color.default_day_text_color));
+                mDayUnavailableTextColor = a.getColor(R.styleable.Ranger_dayUnavailableTextColor, getColor(R.color.default_unavailable_day_text_color));
                 mSelectedDayTextColor = a.getColor(R.styleable.Ranger_selectedDayTextColor, getColor(R.color.default_selected_day_text_color));
 
                 mDaysContainerBackgroundColor = a.getColor(R.styleable.Ranger_daysContainerBackgroundColor, getColor(R.color.default_days_container_background_color));
@@ -178,6 +185,33 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     public void setStartAndEndDateWithParts(int startYear, int startMonth, int startDay, int endYear, int endMonth, int endDay) {
         setStartDateWithParts(startYear, startMonth, startDay);
         setEndDateWithParts(endYear, endMonth, endDay);
+
+        render();
+        //Set Selection. Default is today.
+        setSelectedDay(startDay, false);
+    }
+
+    public void setStartAndEndDateWithDisabledDates(LocalDateTime startDate, LocalDateTime endDate, List<LocalDateTime> disabledDates) {
+        mStartDate = startDate;
+        mEndDate = endDate;
+        mDisabledDates = new ArrayList<>(disabledDates);
+
+        //Add left padding
+        mLeftSpace = new Space(mContext);
+        mDaysContainer.addView(mLeftSpace);
+
+        //Cycle from start day
+        LocalDateTime date = mStartDate;
+        int startDay = 0;
+
+        while (startDay == 0 && date.isBefore(mEndDate.plusDays(1))) {
+
+            if (!disabledDates.contains(date)) {
+                startDay = date.getDayOfMonth();
+            }
+            //Next day
+            date = date.plusDays(1);
+        }
 
         render();
         //Set Selection. Default is today.
@@ -232,6 +266,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         LocalDateTime startDate = mStartDate;
         LocalDateTime endDate = mEndDate;
 
+        boolean isDayDisabled;
         while (startDate.isBefore(endDate.plusDays(1))) {
 
             //Inflate view
@@ -246,17 +281,27 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
                 dayView.hideDayOfWeek();
 
             dayView.setDay(startDate.getDayOfMonth());
-            dayView.setMonthShortName(startDate.monthOfYear().getAsShortText().substring(0,3));
+            dayView.setMonthShortName(startDate.monthOfYear().getAsShortText().substring(0, 3));
+
+            isDayDisabled = mDisabledDates.contains(startDate);
 
             //Hide month if range in same month
-            if (!mAlwaysDisplayMonth && startDate.getMonthOfYear() == endDate.getMonthOfYear())
+            if (!mAlwaysDisplayMonth && startDate.getMonthOfYear() == endDate.getMonthOfYear()) {
                 dayView.hideMonthShortName();
+            }
 
             //Set style
             dayView.setTextColor(mDayTextColor);
+            if (!isDayDisabled) {
+                dayView.setTextColor(mDayTextColor);
+            } else {
+                dayView.setTextColor(mDayUnavailableTextColor);
+            }
 
             //Set listener
-            dayView.setOnClickListener(this);
+            if (!isDayDisabled) {
+                dayView.setOnClickListener(this);
+            }
 
             //Add to container
             mDaysContainer.addView(dayView.getView());
@@ -463,6 +508,5 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         public void hideMonthShortName() {
             mMonthShortName.setVisibility(View.GONE);
         }
-
     }
 }

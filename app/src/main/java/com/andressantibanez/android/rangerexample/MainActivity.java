@@ -10,7 +10,9 @@ import android.view.View;
 import com.andressantibanez.ranger.Ranger;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,15 +34,13 @@ public class MainActivity extends AppCompatActivity {
         DateTime startDate = new DateTime(new Date()).withTime(0, 0, 0, 0);
         DateTime endDate = startDate.plusDays(5).withTime(23, 59, 59, 999);
 
-        ranger.setStartAndEndDateWithParts(
-                startDate.getYear(),
-                startDate.getMonthOfYear(),
-                startDate.getDayOfMonth(),
-                endDate.getYear(),
-                endDate.getMonthOfYear(),
-                endDate.getDayOfMonth()
-        );
+        LocalDateTime startDateTime = new LocalDateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), 0, 0, 0);
+        LocalDateTime endDateTime = new LocalDateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), 0, 0, 0);
 
+        ArrayList<LocalDateTime> unactiveDates = new ArrayList<>();
+        unactiveDates.add(startDateTime.plusDays(1));
+
+        ranger.setStartAndEndDateWithDisabledDates(startDateTime, endDateTime, unactiveDates);
     }
 
     @Override
