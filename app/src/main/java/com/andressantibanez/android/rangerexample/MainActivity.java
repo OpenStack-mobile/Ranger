@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         Ranger ranger = (Ranger) findViewById(R.id.listener_ranger);
         ranger.setDayViewOnClickListener(new Ranger.DayViewOnClickListener() {
             @Override
-            public void onDaySelected(long date) {
+            public void onDaySelected(DateTime date) {
                 View parentLayout = findViewById(android.R.id.content);
                 Snackbar.make(parentLayout, "Seleted date: " + date, Snackbar.LENGTH_SHORT).show();
             }

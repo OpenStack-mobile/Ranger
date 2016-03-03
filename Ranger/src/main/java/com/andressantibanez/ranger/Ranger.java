@@ -70,16 +70,16 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         mListener = listener;
     }
 
-    public long getSelectedDate() {
+    public DateTime getSelectedDate() {
         //Cycle from start day
         DateTime startDate = mStartDate;
         DateTime endDate = mEndDate;
 
-        long selectedDate = 0;
+        DateTime selectedDate = null;
         Boolean found = false;
         while (startDate.isBefore(endDate.plusDays(1)) && !found) {
             if (startDate.getDayOfMonth() == mSelectedDay) {
-                selectedDate = startDate.toDate().getTime();
+                selectedDate = startDate;
                 found = true;
             }
 
@@ -90,7 +90,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     }
 
     public interface DayViewOnClickListener {
-        public void onDaySelected(long date);
+        public void onDaySelected(DateTime date);
     }
 
     //Day View
