@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -47,10 +48,10 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
      */
     //State
     Context mContext;
-    LocalDateTime mStartDate;
-    LocalDateTime mEndDate;
+    DateTime mStartDate;
+    DateTime mEndDate;
     int mSelectedDay;
-    List<LocalDateTime> mDisabledDates = new ArrayList<>();
+    List<DateTime> mDisabledDates = new ArrayList<>();
 
     //Colors
     int mDayTextColor;
@@ -71,8 +72,8 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
     public long getSelectedDate() {
         //Cycle from start day
-        LocalDateTime startDate = mStartDate;
-        LocalDateTime endDate = mEndDate;
+        DateTime startDate = mStartDate;
+        DateTime endDate = mEndDate;
 
         long selectedDate = 0;
         Boolean found = false;
@@ -191,7 +192,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         setSelectedDay(startDay, false);
     }
 
-    public void setStartAndEndDateWithDisabledDates(LocalDateTime startDate, LocalDateTime endDate, List<LocalDateTime> disabledDates) {
+    public void setStartAndEndDateWithDisabledDates(DateTime startDate, DateTime endDate, List<DateTime> disabledDates) {
         mStartDate = startDate;
         mEndDate = endDate;
         mDisabledDates = new ArrayList<>(disabledDates);
@@ -201,7 +202,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         mDaysContainer.addView(mLeftSpace);
 
         //Cycle from start day
-        LocalDateTime date = mStartDate;
+        DateTime date = mStartDate;
         int startDay = 0;
 
         while (startDay == 0 && date.isBefore(mEndDate.plusDays(1))) {
@@ -219,11 +220,11 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     }
 
     private void setStartDateWithParts(int year, int month, int day) {
-        mStartDate = new LocalDateTime(year, month, day, 0, 0, 0);
+        mStartDate = new DateTime(year, month, day, 0, 0, 0);
     }
 
     private void setEndDateWithParts(int year, int month, int day) {
-        mEndDate = new LocalDateTime(year, month, day, 23, 59, 59);
+        mEndDate = new DateTime(year, month, day, 23, 59, 59);
     }
 
     public void setSelectedDay(final int day, final boolean notifyListeners) {
@@ -263,8 +264,8 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         mDaysContainer.addView(mLeftSpace);
 
         //Cycle from start day
-        LocalDateTime startDate = mStartDate;
-        LocalDateTime endDate = mEndDate;
+        DateTime startDate = mStartDate;
+        DateTime endDate = mEndDate;
 
         boolean isDayDisabled;
         while (startDate.isBefore(endDate)) {
@@ -375,8 +376,8 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         super.onRestoreInstanceState(savedState.getSuperState());
 
         mSelectedDay = savedState.getSelectedDay();
-        mStartDate = LocalDateTime.parse(savedState.getStartDateString());
-        mEndDate = LocalDateTime.parse(savedState.getEndDateDateString());
+        mStartDate = DateTime.parse(savedState.getStartDateString());
+        mEndDate = DateTime.parse(savedState.getEndDateDateString());
 
         render();
 
