@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -122,7 +123,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
-
 
     /**
      * Initialization
@@ -366,6 +366,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         savedState.setSelectedDay(mSelectedDay);
         savedState.setStartDateString(mStartDate.toString());
         savedState.setEndDateString(mEndDate.toString());
+        savedState.setDisabledDates(TextUtils.join(",", mDisabledDates));
 
         return savedState;
     }
@@ -378,6 +379,14 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         mSelectedDay = savedState.getSelectedDay();
         mStartDate = DateTime.parse(savedState.getStartDateString());
         mEndDate = DateTime.parse(savedState.getEndDateDateString());
+        String disabledDatesString = savedState.getDisabledDates();
+        mDisabledDates.clear();
+
+        if (disabledDatesString != null && !disabledDatesString.isEmpty()) {
+            for(String dateString : disabledDatesString.split(",")) {
+                mDisabledDates.add(DateTime.parse(dateString));
+            }
+        }
 
         render();
 
@@ -388,6 +397,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         int mSelectedDay;
         String mStartDateString;
         String mEndDateString;
+        String mDisabledDates;
 
         public SavedState(Parcelable superState) {
             super(superState);
@@ -439,6 +449,14 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         public String getEndDateDateString() {
             return mEndDateString;
+        }
+
+        public String getDisabledDates() {
+            return mDisabledDates;
+        }
+
+        public void setDisabledDates(String mDisabledDates) {
+            this.mDisabledDates = mDisabledDates;
         }
     }
 
