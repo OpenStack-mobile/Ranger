@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         DateTime endDateTime = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), 23, 59, 59);
 
         ArrayList<DateTime> disabledDates = new ArrayList<>();
-        disabledDates.add(startDateTime.plusDays(1));
+        disabledDates.add(startDateTime);
         disabledDates.add(startDateTime.plusDays(3));
 
         ranger.setStartAndEndDateWithDisabledDates(startDateTime, endDateTime, disabledDates);

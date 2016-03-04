@@ -292,7 +292,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
             }
 
             //Set style
-            dayView.setTextColor(mDayTextColor);
             if (!isDayDisabled) {
                 dayView.setTextColor(mDayTextColor);
             } else {
@@ -317,14 +316,35 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     }
 
     private void unSelectDay(int day) {
+        DateTime currentDate = getCurrentDateFromDay(day);
+        boolean isDayDisabled = mDisabledDates.contains(currentDate);
         for (int i = 1; i < mDaysContainer.getChildCount() - 1; i++) {
             DayView dayView = new DayView(mDaysContainer.getChildAt(i));
             if(dayView.getDay() == day) {
-                dayView.setTextColor(mDayTextColor);
+                if (!isDayDisabled) {
+                    dayView.setTextColor(mDayTextColor);
+                }
+                else {
+                    dayView.setTextColor(mDayUnavailableTextColor);
+                }
                 dayView.setBackgroundColor(0);
                 return;
             }
         }
+    }
+
+    private DateTime getCurrentDateFromDay(int day) {
+        boolean found = false;
+        DateTime date = mStartDate;
+        while (!found && date.isBefore(mEndDate)) {
+            if (date.getDayOfMonth() == day) {
+                found = true;
+            }
+            else {
+                date = date.plusDays(1);
+            }
+        }
+        return date;
     }
 
     private void selectDay(int day) {
