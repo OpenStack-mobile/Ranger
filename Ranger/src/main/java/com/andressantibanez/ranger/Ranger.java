@@ -320,7 +320,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
             dayView.setDay(startDate.getDayOfMonth());
             dayView.setMonthShortName(startDate.monthOfYear().getAsShortText().substring(0, 3));
 
-            isDayDisabled = mDisabledDates.contains(startDate);
+            isDayDisabled = disabledDatesContains(startDate);
 
             //Hide month if range in same month
             if (!mAlwaysDisplayMonth && startDate.getMonthOfYear() == endDate.getMonthOfYear()) {
@@ -353,7 +353,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
     private void unSelectDay(int day) {
         DateTime currentDate = getCurrentDateFromDay(day);
-        boolean isDayDisabled = mDisabledDates.contains(currentDate);
+        boolean isDayDisabled = disabledDatesContains(currentDate);
         for (int i = 1; i < mDaysContainer.getChildCount() - 1; i++) {
             DayView dayView = new DayView(mDaysContainer.getChildAt(i));
             if(dayView.getDay() == day) {
