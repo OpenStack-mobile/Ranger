@@ -130,11 +130,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         //Init JodaTime
         JodaTimeAndroid.init(context);
 
-        //Init Start and End date with current month
-        final LocalDateTime currentDateTime = new LocalDateTime();
-        setStartDateWithParts(currentDateTime.getYear(), currentDateTime.getMonthOfYear(), currentDateTime.dayOfMonth().withMinimumValue().getDayOfMonth());
-        setEndDateWithParts(currentDateTime.getYear(), currentDateTime.getMonthOfYear(), currentDateTime.dayOfMonth().withMaximumValue().getDayOfMonth());
-
         //Inflate view
         View view = LayoutInflater.from(mContext).inflate(WIDGET_LAYOUT_RES_ID, this, true);
 
@@ -168,12 +163,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         //Setup styling
         //Days Container
         mDaysContainer.setBackgroundColor(mDaysContainerBackgroundColor);
-
-        //Render control
-        render();
-
-        //Set Selection. Default is today.
-        setSelectedDay(currentDateTime.getDayOfMonth(), false);
     }
 
     /***
@@ -203,7 +192,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         while (startDay == 0 && date.isBefore(mEndDate.plusDays(1))) {
 
-            if (!disabledDates.contains(date)) {
+            if (!disabledDatesContains(date)) {
                 startDay = date.getDayOfMonth();
             }
             date = date.plusDays(1);
@@ -212,6 +201,22 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         render();
 
         setSelectedDay(startDay, false);
+    }
+
+    private boolean disabledDatesContains(DateTime date) {
+        if (mDisabledDates == null) {
+            return false;
+        }
+
+        boolean found = false;
+        int pos = 0;
+        while (!found && pos < mDisabledDates.size()) {
+            if (mDisabledDates.get(pos).getMillis() == date.getMillis()) {
+                found = true;
+            }
+            pos++;
+        }
+        return found;
     }
 
     public void setDisabledDates(List<DateTime> disabledDates) {
@@ -226,7 +231,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         while (startDay == 0 && date.isBefore(mEndDate.plusDays(1))) {
 
-            if (!disabledDates.contains(date)) {
+            if (!disabledDatesContains(date)) {
                 startDay = date.getDayOfMonth();
             }
 
@@ -237,7 +242,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         boolean isSelectedDayDisabled = false;
         while (!isSelectedDayDisabled && date.isBefore(mEndDate.plusDays(1))) {
 
-            if (disabledDates.contains(date) && date.getDayOfMonth() == mSelectedDay) {
+            if (disabledDatesContains(date) && date.getDayOfMonth() == mSelectedDay) {
                 isSelectedDayDisabled = true;
             }
 
@@ -415,8 +420,8 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         SavedState savedState = new SavedState(superState);
         savedState.setSelectedDay(mSelectedDay);
-        savedState.setStartDateString(mStartDate.toString());
-        savedState.setEndDateString(mEndDate.toString());
+        savedState.setStartDateString(mStartDate != null ? mStartDate.toString() : null);
+        savedState.setEndDateString(mEndDate != null ? mEndDate.toString() : null);
         savedState.setDisabledDates(TextUtils.join(",", mDisabledDates));
 
         return savedState;

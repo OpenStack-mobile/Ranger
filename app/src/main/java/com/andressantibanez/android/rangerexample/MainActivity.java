@@ -1,5 +1,6 @@
 package com.andressantibanez.android.rangerexample;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-
+    boolean isFirstTime = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +55,42 @@ public class MainActivity extends AppCompatActivity {
                 ranger.setDisabledDates(disabledDates);
             }
         });
+
+        Button navigateButton = (Button)findViewById(R.id.navigate_button);
+        navigateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SecondaryActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final Ranger ranger = (Ranger) findViewById(R.id.listener_ranger);
+        DateTime startDate = new DateTime(new Date()).withTime(0, 0, 0, 0);
+        DateTime endDate = startDate.plusDays(5).withTime(23, 59, 59, 999);
+
+        final DateTime startDateTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), 0, 0, 0);
+        final DateTime endDateTime = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), 23, 59, 59);
+
+        if (isFirstTime) {
+            ArrayList<DateTime> disabledDates = new ArrayList<>();
+            disabledDates.add(startDateTime);
+            disabledDates.add(startDateTime.plusDays(3));
+
+            ranger.setStartAndEndDateWithDisabledDates(startDateTime, endDateTime, disabledDates);
+            isFirstTime = false;
+        }
+        else {
+            ArrayList<DateTime> disabledDates = new ArrayList<>();
+            disabledDates.add(startDateTime.plusDays(1));
+            disabledDates.add(startDateTime.plusDays(4));
+
+            ranger.setDisabledDates(disabledDates);
+        }
     }
 
     @Override
