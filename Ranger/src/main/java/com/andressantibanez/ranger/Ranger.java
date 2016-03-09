@@ -2,13 +2,10 @@ package com.andressantibanez.ranger;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -179,7 +176,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         setSelectedDay(currentDateTime.getDayOfMonth(), false);
     }
 
-
     /***
      * State modification
      */
@@ -210,13 +206,48 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
             if (!disabledDates.contains(date)) {
                 startDay = date.getDayOfMonth();
             }
-            //Next day
             date = date.plusDays(1);
         }
 
         render();
-        //Set Selection. Default is today.
+
         setSelectedDay(startDay, false);
+    }
+
+    public void setDisabledDates(List<DateTime> disabledDates) {
+        mDisabledDates = new ArrayList<>(disabledDates);
+
+        //Add left padding
+        mLeftSpace = new Space(mContext);
+        mDaysContainer.addView(mLeftSpace);
+
+        DateTime date = mStartDate;
+        int startDay = 0;
+
+        while (startDay == 0 && date.isBefore(mEndDate.plusDays(1))) {
+
+            if (!disabledDates.contains(date)) {
+                startDay = date.getDayOfMonth();
+            }
+
+            date = date.plusDays(1);
+        }
+
+        date = mStartDate;
+        boolean isSelectedDayDisabled = false;
+        while (!isSelectedDayDisabled && date.isBefore(mEndDate.plusDays(1))) {
+
+            if (disabledDates.contains(date) && date.getDayOfMonth() == mSelectedDay) {
+                isSelectedDayDisabled = true;
+            }
+
+            date = date.plusDays(1);
+        }
+
+        render();
+
+        int selectedDay = !isSelectedDayDisabled && mSelectedDay > 0 ? mSelectedDay : startDay;
+        setSelectedDay(selectedDay, false);
     }
 
     private void setStartDateWithParts(int year, int month, int day) {

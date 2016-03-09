@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.andressantibanez.ranger.Ranger;
 
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Ranger ranger = (Ranger) findViewById(R.id.listener_ranger);
+        final Ranger ranger = (Ranger) findViewById(R.id.listener_ranger);
         ranger.setDayViewOnClickListener(new Ranger.DayViewOnClickListener() {
             @Override
             public void onDaySelected(DateTime date) {
@@ -34,14 +35,25 @@ public class MainActivity extends AppCompatActivity {
         DateTime startDate = new DateTime(new Date()).withTime(0, 0, 0, 0);
         DateTime endDate = startDate.plusDays(5).withTime(23, 59, 59, 999);
 
-        DateTime startDateTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), 0, 0, 0);
-        DateTime endDateTime = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), 23, 59, 59);
+        final DateTime startDateTime = new DateTime(startDate.getYear(), startDate.getMonthOfYear(), startDate.getDayOfMonth(), 0, 0, 0);
+        final DateTime endDateTime = new DateTime(endDate.getYear(), endDate.getMonthOfYear(), endDate.getDayOfMonth(), 23, 59, 59);
 
         ArrayList<DateTime> disabledDates = new ArrayList<>();
         disabledDates.add(startDateTime);
         disabledDates.add(startDateTime.plusDays(3));
 
         ranger.setStartAndEndDateWithDisabledDates(startDateTime, endDateTime, disabledDates);
+
+        Button changeDisableDatesButton = (Button)findViewById(R.id.change_disable_dates_button);
+        changeDisableDatesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<DateTime> disabledDates = new ArrayList<>();
+                disabledDates.add(startDateTime.plusDays(1));
+                disabledDates.add(startDateTime.plusDays(3));
+                ranger.setDisabledDates(disabledDates);
+            }
+        });
     }
 
     @Override

@@ -48,5 +48,9 @@
         app:selectedDayBackgroundColor="#FFAA4D"
         app:displayDayOfWeek="true"/>
 
-
+    <Button
+        android:id="@+id/change_disable_dates_button"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:text="Change Disabled Dates"/>
 </LinearLayout>
