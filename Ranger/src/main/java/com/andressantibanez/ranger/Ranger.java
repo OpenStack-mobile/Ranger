@@ -228,11 +228,13 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         DateTime date = mStartDate;
         int startDay = 0;
+        boolean foundDay = false;
 
         while (startDay == 0 && date.isBefore(mEndDate.plusDays(1))) {
 
             if (!disabledDatesContains(date)) {
                 startDay = date.getDayOfMonth();
+                foundDay = true;
             }
 
             date = date.plusDays(1);
@@ -251,8 +253,10 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         render();
 
-        int selectedDay = !isSelectedDayDisabled && mSelectedDay > 0 ? mSelectedDay : startDay;
-        setSelectedDay(selectedDay, false);
+        if(foundDay) {
+            int selectedDay = !isSelectedDayDisabled && mSelectedDay > 0 ? mSelectedDay : startDay;
+            setSelectedDay(selectedDay, false);
+        }
     }
 
     private void setStartDateWithParts(int year, int month, int day) {
