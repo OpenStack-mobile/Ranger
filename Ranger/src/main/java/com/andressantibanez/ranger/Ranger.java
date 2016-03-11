@@ -292,6 +292,9 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     }
 
     private void render() {
+        if (mStartDate == null || mEndDate == null) {
+            return;
+        }
         mDaysContainer.removeAllViews();
 
         //Get inflater for view
@@ -435,8 +438,8 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
         super.onRestoreInstanceState(savedState.getSuperState());
 
         mSelectedDay = savedState.getSelectedDay();
-        mStartDate = DateTime.parse(savedState.getStartDateString());
-        mEndDate = DateTime.parse(savedState.getEndDateDateString());
+        mStartDate = savedState.getStartDateString() != null ?  DateTime.parse(savedState.getStartDateString()) : null;
+        mEndDate = savedState.getEndDateDateString() != null ? DateTime.parse(savedState.getEndDateDateString()) : null;
         String disabledDatesString = savedState.getDisabledDates();
         mDisabledDates.clear();
 
