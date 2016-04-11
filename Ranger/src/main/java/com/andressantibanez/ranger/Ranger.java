@@ -318,12 +318,19 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
             DayView dayView = new DayView(view);
 
             //Set texts and listener
-            dayView.setDayOfWeek(startDate.dayOfWeek().getAsShortText().substring(0, 3));
+            String dayOfTheWeekShortText = startDate.dayOfWeek().getAsShortText();
+            dayView.setDayOfWeek(
+                    dayOfTheWeekShortText.length() >= 3 ? dayOfTheWeekShortText.substring(0, 3) : dayOfTheWeekShortText
+            );
             if(!mDisplayDayOfWeek)
                 dayView.hideDayOfWeek();
 
             dayView.setDay(startDate.getDayOfMonth());
-            dayView.setMonthShortName(startDate.monthOfYear().getAsShortText().substring(0, 3));
+
+            String monthOfTheWeekShortText = startDate.monthOfYear().getAsShortText();
+            dayView.setMonthShortName(
+                    monthOfTheWeekShortText.length() >= 3 ? monthOfTheWeekShortText.substring(0, 3) : monthOfTheWeekShortText
+            );
 
             isDayDisabled = disabledDatesContains(startDate);
 
