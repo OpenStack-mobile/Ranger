@@ -16,14 +16,12 @@ import android.widget.TextView;
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Ranger extends HorizontalScrollView implements View.OnClickListener {
-
-    public final static String TAG = Ranger.class.getSimpleName();
 
     /**
      * Constants
@@ -36,10 +34,6 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     public static final int DAY_OF_WEEK_RES_ID = R.id.day_of_week;
     public static final int DAY_NUMBER_RES_ID = R.id.day_number;
     public static final int MONTH_NAME_RES_ID = R.id.month_short_name;
-    //Delay
-    public static final int DELAY_SELECTION = 300;
-    public static final int NO_DELAY_SELECTION = 0;
-
 
     /**
      * Variables
@@ -88,7 +82,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
     }
 
     public interface DayViewOnClickListener {
-        public void onDaySelected(DateTime date);
+        void onDaySelected(DateTime date);
     }
 
     //Day View
@@ -536,10 +530,10 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         int mDay;
 
-        LinearLayout mView;
-        TextView mDayOfWeek;
-        TextView mDayNumber;
-        TextView mMonthShortName;
+        final LinearLayout mView;
+        final TextView mDayOfWeek;
+        final TextView mDayNumber;
+        final TextView mMonthShortName;
 
         public DayView(View view) {
             mView = (LinearLayout) view;
@@ -555,7 +549,7 @@ public class Ranger extends HorizontalScrollView implements View.OnClickListener
 
         public void setDay(int day) {
             mDay = day;
-            setDayNumber(String.format("%02d", day));
+            setDayNumber(String.format(Locale.US,"%02d", day));
         }
 
         public void setDayOfWeek(String dayOfWeek) {

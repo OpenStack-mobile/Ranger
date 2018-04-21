@@ -12,7 +12,6 @@ import android.widget.Button;
 import com.andressantibanez.ranger.Ranger;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.Date;

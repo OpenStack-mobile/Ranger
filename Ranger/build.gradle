@@ -22,3 +22,7 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'net.danlew:android.joda:2.9.7'
 }
+
+apply plugin: 'maven'
+
+group = 'com.github.OpenStack-mobile'
