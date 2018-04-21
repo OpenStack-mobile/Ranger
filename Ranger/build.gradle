@@ -23,6 +23,6 @@ dependencies {
     implementation 'net.danlew:android.joda:2.9.7'
 }
 
-apply plugin: 'maven'
+apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.OpenStack-mobile'
