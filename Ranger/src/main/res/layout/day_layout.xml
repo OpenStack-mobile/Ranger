@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="12sp"
+        android:textSize="12dp"
         android:textAllCaps="true"
         tools:text="jue."/>
 
@@ -23,9 +23,9 @@
         android:id="@+id/day_number"
         android:layout_width="wrap_content"
         android:layout_margin="0dp"
-        android:padding="0dp"
-        android:textSize="16sp"
-        android:layout_height="20dp"
+        android:padding="4dp"
+        android:textSize="16dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         tools:text="30"/>
 
